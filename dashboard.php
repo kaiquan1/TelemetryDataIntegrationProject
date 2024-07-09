@@ -11,6 +11,7 @@
         <header>
             <div class="user-info">
                 <span class="user-name">COSMOS</span>
+                <button class="logout-button" onclick="window.location.href = 'login.php';">Log Out</button>
             </div>
         </header>
         <main>
