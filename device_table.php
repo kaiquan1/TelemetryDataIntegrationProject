@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
     <script>
         async function fetchData() {
             try {
