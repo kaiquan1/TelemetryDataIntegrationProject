@@ -122,3 +122,25 @@ table th {
 .high-battery {
     background-color: green;
 }
+
+#searchBar {
+    width: 100%;
+    padding: 10px 40px 10px 20px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#searchBar:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.search-container {
+    position: relative;
+    width: 30%;
+}
