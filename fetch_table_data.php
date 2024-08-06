@@ -20,42 +20,42 @@ OUTER APPLY (
         a.INF_Date
     FROM [ScadaNetDb].[dbo].[View_ArchivedInformations] a
     WHERE a.STA_SiteNumber = s.STA_SiteNumber AND a.INF_NumberInStation = 1
-    ORDER BY a.INF_Date DESC
+    ORDER BY a.Archive_ID DESC
 ) a1
 OUTER APPLY (
     SELECT TOP 1 
         a.INF_Value
     FROM [ScadaNetDb].[dbo].[View_ArchivedInformations] a
     WHERE a.STA_SiteNumber = s.STA_SiteNumber AND a.INF_NumberInStation = 2
-    ORDER BY a.INF_Date DESC
+    ORDER BY a.Archive_ID DESC
 ) a2
 OUTER APPLY (
     SELECT TOP 1 
         a.INF_Value
     FROM [ScadaNetDb].[dbo].[View_ArchivedInformations] a
     WHERE a.STA_SiteNumber = s.STA_SiteNumber AND a.INF_NumberInStation = 3
-    ORDER BY a.INF_Date DESC
+    ORDER BY a.Archive_ID DESC
 ) a3
 OUTER APPLY (
     SELECT TOP 1 
         a.INF_Value
     FROM [ScadaNetDb].[dbo].[View_ArchivedInformations] a
     WHERE a.STA_SiteNumber = s.STA_SiteNumber AND a.INF_NumberInStation = 17
-    ORDER BY a.INF_Date DESC
+    ORDER BY a.Archive_ID DESC
 ) a17
 OUTER APPLY (
     SELECT TOP 1 
         a.INF_Value
     FROM [ScadaNetDb].[dbo].[View_ArchivedInformations] a
     WHERE a.STA_SiteNumber = s.STA_SiteNumber AND a.INF_NumberInStation = 49
-    ORDER BY a.INF_Date DESC
+    ORDER BY a.Archive_ID DESC
 ) a49
 OUTER APPLY (
     SELECT TOP 1 
         a.INF_Value
     FROM [ScadaNetDb].[dbo].[View_ArchivedInformations] a
     WHERE a.STA_SiteNumber = s.STA_SiteNumber AND a.INF_NumberInStation = 44
-    ORDER BY a.INF_Date DESC
+    ORDER BY a.Archive_ID DESC
 ) a44
 ";
 
