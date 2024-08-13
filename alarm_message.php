@@ -7,11 +7,12 @@
             margin-top: 15 px;
             color: red;
             margin-bottom: 10px;
-        }
+            margin-left: 70px;
+            text-align: left;
+            line-height: 25px;
+}
 
 </style>
-
-
 
     <table id="dataTable">
 
@@ -58,9 +59,10 @@ function displayLowBatteryStations(rows) {
     lowBatteryRows.forEach(row => {
         const item = document.createElement('tr');
         item.className = 'low-battery-item';
-        item.textContent = `${row.MeterBattert ?? 0}% ${row.STA_Label}`;
+        item.textContent = `${row.MeterBattery ?? 0}% ${row.STA_Label}`;
         lowBatteryList.appendChild(item);   
     });
+
 }
 
 // Call fetchData to populate the table and display low battery stations
