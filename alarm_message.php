@@ -14,9 +14,9 @@
 
 </style>
 
-    <table id="dataTable">
+    <table id="asd">
 
-        <tbody id="tableBody">
+        <tbody id="asd">
             <!-- Table rows will be added here -->
         </tbody>
     </table>
