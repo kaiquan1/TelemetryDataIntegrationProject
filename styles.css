@@ -90,7 +90,7 @@ table th {
     display: inline-block;
     vertical-align: middle;
     margin-left: 5px;
-    margin-right: auto; /* Ensure left alignment */
+    margin-right: auto;
 }
 
 .battery-level {
