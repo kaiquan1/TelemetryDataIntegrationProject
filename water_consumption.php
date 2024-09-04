@@ -26,13 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $startDate = $_POST['startDate'];
     $endDate = $_POST['endDate'];
 
-    // Format the start and end dates to include the full time range as in DB
+    // Format the start and end dates to include the full-time range as in DB
     if ($startDate) {
         $startDate .= ' 00:00:00.0000000'; // Append the time to start date to change the format
     }
     
     if ($endDate) {
-        $endDate .= ' 23:59:59.0000000'; // Append the time to end date to change the format
+        $endDate .= ' 23:45:00.0000000'; // Append the time to end date to change the format
     }
 
     $sql = "
@@ -45,17 +45,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     FROM
         [ScadaNetDb].[dbo].[View_Stations] s
     INNER JOIN 
-        [ScadaNetDb].[dbo].[View_FetchTableData] a 
+        [ScadaNetDb].[dbo].[View_ArchivedInformations] a 
         ON s.STA_SiteNumber = a.STA_SiteNumber
     -- Add proper joins for a1, a2, a3 with correct conditions
     LEFT JOIN 
-        [ScadaNetDb].[dbo].[View_FetchTableData] a1 
+        [ScadaNetDb].[dbo].[View_ArchivedInformations] a1 
         ON a.STA_SiteNumber = a1.STA_SiteNumber AND a1.INF_NumberInStation = 1
     LEFT JOIN 
-        [ScadaNetDb].[dbo].[View_FetchTableData] a2 
+        [ScadaNetDb].[dbo].[View_ArchivedInformations] a2 
         ON a.STA_SiteNumber = a2.STA_SiteNumber AND a2.INF_NumberInStation = 2
     LEFT JOIN 
-        [ScadaNetDb].[dbo].[View_FetchTableData] a3 
+        [ScadaNetDb].[dbo].[View_ArchivedInformations] a3 
         ON a.STA_SiteNumber = a3.STA_SiteNumber AND a3.INF_NumberInStation = 3
     WHERE 
         s.STA_Label = ? 
