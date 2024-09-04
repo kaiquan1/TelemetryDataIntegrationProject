@@ -26,15 +26,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $startDate = $_POST['startDate'];
     $endDate = $_POST['endDate'];
 
-    // Format the start and end dates to include the full-time range as in DB
+    // Format the start and end dates to include the full time range as in DB
     if ($startDate) {
-        $startDate .= ' 00:00:00.0000000'; // Append the time to start date to change the format
+        $startDate .= ' 00:00:00.0000000';
     }
-    
     if ($endDate) {
-        $endDate .= ' 23:45:00.0000000'; // Append the time to end date to change the format
+        $endDate .= ' 23:45:00.0000000';
     }
 
+    // Debug inputs
+    echo "<script>console.log('Inputs:', " . json_encode(['metering' => $metering, 'siteLabel' => $siteLabel, 'startDate' => $startDate, 'endDate' => $endDate]) . ");</script>";
+
+    // Correct SQL query and ensure it matches the data structure
     $sql = "
     SELECT
         s.STA_Label,
@@ -47,69 +50,77 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     INNER JOIN 
         [ScadaNetDb].[dbo].[View_ArchivedInformations] a 
         ON s.STA_SiteNumber = a.STA_SiteNumber
-    -- Add proper joins for a1, a2, a3 with correct conditions
     LEFT JOIN 
         [ScadaNetDb].[dbo].[View_ArchivedInformations] a1 
-        ON a.STA_SiteNumber = a1.STA_SiteNumber AND a1.INF_NumberInStation = 1
+        ON a.STA_SiteNumber = a1.STA_SiteNumber AND a1.INF_NumberInStation = 1 AND a.INF_Date = a1.INF_Date
     LEFT JOIN 
         [ScadaNetDb].[dbo].[View_ArchivedInformations] a2 
-        ON a.STA_SiteNumber = a2.STA_SiteNumber AND a2.INF_NumberInStation = 2
+        ON a.STA_SiteNumber = a2.STA_SiteNumber AND a2.INF_NumberInStation = 2 AND a.INF_Date = a2.INF_Date
     LEFT JOIN 
         [ScadaNetDb].[dbo].[View_ArchivedInformations] a3 
-        ON a.STA_SiteNumber = a3.STA_SiteNumber AND a3.INF_NumberInStation = 3
+        ON a.STA_SiteNumber = a3.STA_SiteNumber AND a3.INF_NumberInStation = 3 AND a.INF_Date = a3.INF_Date
     WHERE 
         s.STA_Label = ? 
         AND a.INF_Date BETWEEN ? AND ?
     ORDER BY 
-        a.INF_Date DESC
+        a.Archive_ID DESC
     ";
-     
 
-    // Correct parameter order and types
+    // Execute query with parameters
     $params = [$siteLabel, $startDate, $endDate];
     $stmt = sqlsrv_query($conn, $sql, $params);
 
+    // Check if SQL query execution failed
     if ($stmt === false) {
         die(json_encode(array("error" => print_r(sqlsrv_errors(), true))));
     }
 
-    //works
-    echo "<script>console.log(" . json_encode($startDate) . ");</script>";
-    echo "<script>console.log(" . json_encode($endDate) . ");</script>";
-    echo "<script>console.log(" . json_encode($siteLabel) . ");</script>";
-    echo "<script>console.log(" . json_encode($metering) . ");</script>";
-    // Define mapping for metering columns
-    $meteringColumns = [
-        'Metering1' => 'Metering1',
-        'Metering2' => 'Metering2',
-        'Metering3' => 'Metering3'
-    ];
-
-
-
+    // Debug: Check if rows are being fetched correctly
+   
+    // Fetch rows and populate the data array
     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
- 
-        //fail
-        echo "<script>console.log(" . json_encode($DateRange) . ");</script>";
+        if (sqlsrv_has_rows($stmt) === false) {
+            echo "<script>console.log('No rows returned');</script>";
+        } else {
+            echo "<script>console.log('Rows fetched');</script>";
+        }
+        // Log fetched data row
+        echo "<script>console.log('Fetched row:', " . json_encode($row) . ");</script>";
         
-        $meteringColumn = $meteringColumns[$metering] ?? '';
-        echo "<script>console.log(" . json_encode($metering) . ");</script>";
-        //echo "<script>console.log(" . json_encode($meteringColumn) . ");</script>";
-        echo "<script>console.log(" . json_encode($DateValue) . ");</script>";
-
-
-        $data[] = [
-            "x" => $row['DateValue'],
-            "y" => $row[$meteringColumn] ?? 0
-        ];
+        
+        // Define mapping for metering columns
+        $meteringValue = 0;
+        switch ($metering) {
+            case 'metering1':
+                $meteringValue = $row['Metering1'] ?? 0;
+                break;
+            case 'metering2':
+                $meteringValue = $row['Metering2'] ?? 0;
+                break;
+            case 'metering3':
+                $meteringValue = $row['Metering3'] ?? 0;
+                break;
+            default:
+                die(json_encode(array("error" => "Invalid metering selection.")));
+        }
+        echo "<script>console.log('Fetched row:', " . json_encode($meteringValue) . ");</script>";
+        
+            // Add data to the array, ensuring that the correct column is accessed
+            $data[] = [
+                "x" => $row['DateValue'], // Ensure this matches your actual date field
+                "y" => $row[$meteringValue] ?? 0
+            ];
+   
+        
     }
-        //fail / empty
-        echo "<script>console.log(" . json_encode($data) . ");</script>";      
-    }
+    // Debug: Check if data array is being populated
+    echo "<script>console.log('Data array:', " . json_encode($data) . ");</script>";
+
     sqlsrv_free_stmt($stmt);
     sqlsrv_close($conn);
-
+}
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -130,9 +141,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <br><br>
                 <label for="INF_VALUE">Metering:</label>
                 <select name="INF_VALUE" id="INF_VALUE">
-                    <option value="Metering1">Metering 1</option>
-                    <option value="Metering2">Metering 2</option>
-                    <option value="Metering3">Metering 3</option>
+                    <option value="metering1">Metering 1</option>
+                    <option value="metering2">Metering 2</option>
+                    <option value="metering3">Metering 3</option>
                 </select>
                 <label for="STA_LABEL">Site:</label>
                 <select name="STA_LABEL" id="STA_LABEL">
