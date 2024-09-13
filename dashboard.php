@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['username'])) {
+    // If not, redirect to the login page
+    header("Location: index.html");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +21,9 @@
     <div class="container">
         <header>
             <div class="user-info">
-                <span class="user-name">COSMOS</span>
-                <button class="logout-button" onclick="window.location.href = 'login.php';">Log Out</button>
+                <span class="user-name"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                <!-- The logout button triggers logout.php to destroy the session -->
+                <button class="logout-button" onclick="window.location.href = 'logout.php';">Log Out</button>
             </div>
         </header>
         <main>
