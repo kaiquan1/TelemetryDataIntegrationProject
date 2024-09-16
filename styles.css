@@ -27,7 +27,7 @@ header {
     background-color: #f4f4f4;
 }
 
-.status-chart, .water-consumption, .alarm-message {
+.water-consumption, .alarm-message {
     background-color: white;
     padding: 20px;
     border-radius: 5px;
@@ -36,10 +36,25 @@ header {
     text-align: center;
 }
 
+.status-chart {
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 30%; /* Take full width of the parent */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center contents horizontally */
+}
+
+/* Directly style the canvas to be responsive */
 #statusChart {
-    width: 40%;
-    height: 40%; 
-    margin: 0 auto; 
+    width: 100% !important; /* Ensure canvas takes full width of the container */
+    max-width: 600px; /* Optional: set a maximum width */
+    height: 400px !important; /* Set a reasonable height */
 }
 
 #waterChart {
