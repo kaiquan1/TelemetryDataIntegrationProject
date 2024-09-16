@@ -53,7 +53,7 @@ header {
 /* Directly style the canvas to be responsive */
 #statusChart {
     width: 100% !important; /* Ensure canvas takes full width of the container */
-    max-width: 600px; /* Optional: set a maximum width */
+    max-width: 400px; /* Optional: set a maximum width */
     height: 400px !important; /* Set a reasonable height */
 }
 
@@ -158,4 +158,20 @@ table th {
 .search-container {
     position: relative;
     width: 30%;
+}
+
+.status-dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.online {
+    background-color: #28a745; /* Green */
+}
+
+.offline {
+    background-color: #dc3545; /* Red */
 }
